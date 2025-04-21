@@ -1,20 +1,15 @@
-# .gitpod.yml (use Gitpod’s built‑in workspace-full image)
+# .gitpod.yml
 image: gitpod/workspace-full
 
 tasks:
-  # 1) Download and unpack Julia into the workspace
+  # 1) Download & unpack Julia into /workspace/julia-1.11.5
   - init: |
       curl -fsSL https://julialang-s3.julialang.org/bin/linux/x64/1.11/julia-1.11.5-linux-x86_64.tar.gz \
         | tar xz -C /workspace
-      echo 'export PATH=/workspace/julia-1.11.5/bin:$PATH' >> ~/.bashrc
-
-      # Activate your project and install dependencies
-      source ~/.bashrc
-      julia --project=/workspace --startup-file=no \
+      # instantiate & precompile in one go
+      /workspace/julia-1.11.5/bin/julia --project=/workspace --startup-file=no \
         -e 'import Pkg; Pkg.instantiate(); Pkg.precompile()'
-  # 2) Run your driver automatically once the workspace is ready
-  - command: bash -lc "julia --project=/workspace notebooks/driver.jl"
+  # 2) Run your driver with the explicit path
+  - command: |
+      /workspace/julia-1.11.5/bin/julia --project=/workspace notebooks/driver.jl
 
-ports:
-  - port: 1234    # if your solver opens a web UI; otherwise you can omit
-    onOpen: ignore
