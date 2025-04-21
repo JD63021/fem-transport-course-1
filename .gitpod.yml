@@ -1,0 +1,5 @@
+image: gitpod/julia-1.11
+
+tasks:
+  - init: julia --project=. -e 'import Pkg; Pkg.instantiate()'
+  - command: julia --project=. notebooks/driver.jl
